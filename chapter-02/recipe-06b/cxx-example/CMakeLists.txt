@@ -6,8 +6,23 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#include_directories("C:/Program Files/Eigen3/Eigen")
-find_package(Eigen3 3.3 REQUIRED NO-MODULE)
+# Set the Eigen3 include directory if not defined
+if(NOT DEFINED EIGEN3_INCLUDE_DIR)
+  set(EIGEN3_INCLUDE_DIR "C:/Program Files/Eigen3")
+endif()
+
+# Add the Eigen3 include directory to the project
+include_directories(${EIGEN3_INCLUDE_DIR})
+
+# Attempt to find Eigen3
+find_package(Eigen3 3.3 REQUIRED NO_MODULE PATHS ${EIGEN3_INCLUDE_DIR}/cmake)
+
+if(Eigen3_FOUND)
+  message(STATUS "Eigen3 found: ${EIGEN3_INCLUDE_DIR}")
+  include_directories(${Eigen3_INCLUDE_DIR})
+else()
+  message(FATAL_ERROR "Eigen3 not found. Make sure Eigen3 is installed and the path is correct.")
+endif()
 
 include(CheckCXXCompilerFlag)
 
